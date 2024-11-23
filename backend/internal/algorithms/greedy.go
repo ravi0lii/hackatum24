@@ -9,10 +9,11 @@ import (
 
 func RunGreedy(id string) scenario.Scenario {
 	var sc scenario.Scenario
+	var err error
 
 	for {
 		// Retrieve a current version of the scenario
-		sc, err := scenario.GetScenario(id)
+		sc, err = scenario.GetScenario(id)
 		if err != nil {
 			panic(err)
 		}

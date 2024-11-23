@@ -17,7 +17,7 @@ func main() {
 	}
 
 	var algorithm string
-	log.Println("Enter algorithm: (greedy)")
+	log.Println("Enter algorithm: (greedy/optimized)")
 	_, err = fmt.Scan(&algorithm)
 	if err != nil {
 		panic(err)
@@ -35,6 +35,8 @@ func main() {
 	switch algorithm {
 	case "greedy":
 		sc = algorithms.RunGreedy(id)
+	case "optimized":
+		sc = algorithms.RunOptimized(id)
 	default:
 		log.Fatalf("Unknown algorithm: %s", algorithm)
 	}

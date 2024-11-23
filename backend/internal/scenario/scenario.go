@@ -115,6 +115,23 @@ func (s *Scenario) TimeElapsed() time.Duration {
 	return s.EndTime.Sub(s.StartTime.Time)
 }
 
+func (s *Scenario) GetVehicleById(id string) *Vehicle {
+	for idx, v := range s.Vehicles {
+		if v.Id == id {
+			return &s.Vehicles[idx]
+		}
+	}
+	return nil
+}
+
 func (c *Customer) DistanceToVehicle(v *Vehicle) float64 {
 	return utils.EuclideanDistance(c.PickupX, c.PickupY, v.LastKnownX, v.LastKnownY)
+}
+
+func (c *Customer) Distance() float64 {
+	return utils.EuclideanDistance(c.PickupX, c.PickupY, c.DestinationX, c.DestinationY)
+}
+
+func (c *Customer) DistanceMyEndToStartOf(other Customer) float64 {
+	return utils.EuclideanDistance(c.DestinationX, c.DestinationY, other.PickupX, other.PickupY)
 }
