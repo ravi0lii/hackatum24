@@ -75,39 +75,42 @@ func (m *squareMatrix) FindLowestCostPath() (path []int) {
 	lowestCost := positiveInf
 
 	for potentialStartNodeIdx := 0; potentialStartNodeIdx < m.Length(); potentialStartNodeIdx++ {
-		visited := make([]bool, m.Length())
-		var lowestCostPath []int
-		currentCost := 0.0
-
-		currentNodeIdx := potentialStartNodeIdx
-		for {
-			visited[currentNodeIdx] = true
-			lowestCostPath = append(lowestCostPath, currentNodeIdx)
-
-			// Find the next node to visit, we visit the next node that has the lowest cost on the edge to it
-			minCost := positiveInf
-			nextNodeIdx := -1
-			for i := 0; i < m.Length(); i++ {
-				if !visited[i] && m.matrix[currentNodeIdx][i] < minCost {
-					minCost = m.matrix[currentNodeIdx][i]
-					nextNodeIdx = i
-				}
-			}
-
-			// All nodes were visited: break the loop
-			if nextNodeIdx == -1 {
-				break
-			}
-
-			currentNodeIdx = nextNodeIdx
-			currentCost += minCost
-		}
+		currentCost, lowestCostPath := m.FindLowestCostPathFromNode(potentialStartNodeIdx)
 
 		// If the found path has a lower cost than the current lowest cost, we found a more viable path
 		if currentCost < lowestCost {
 			lowestCost = currentCost
 			path = lowestCostPath
 		}
+	}
+
+	return
+}
+
+func (m *squareMatrix) FindLowestCostPathFromNode(startIdx int) (cost float64, path []int) {
+	visited := make([]bool, m.Length())
+	currentNodeIdx := startIdx
+	for {
+		visited[currentNodeIdx] = true
+		path = append(path, currentNodeIdx)
+
+		// Find the next node to visit, we visit the next node that has the lowest cost on the edge to it
+		minCost := positiveInf
+		nextNodeIdx := -1
+		for i := 0; i < m.Length(); i++ {
+			if !visited[i] && m.matrix[currentNodeIdx][i] < minCost {
+				minCost = m.matrix[currentNodeIdx][i]
+				nextNodeIdx = i
+			}
+		}
+
+		// All nodes were visited: break the loop
+		if nextNodeIdx == -1 {
+			break
+		}
+
+		currentNodeIdx = nextNodeIdx
+		cost += minCost
 	}
 
 	return

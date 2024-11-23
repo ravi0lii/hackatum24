@@ -15,7 +15,6 @@ class ApiClient {
     }
 
     get<T>(url: string, params?: unknown) {
-        console.log('Request Headers:', this.client.defaults.headers);
         return this.client.get<T>(url, {params})
     }
 

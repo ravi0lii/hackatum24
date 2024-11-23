@@ -1,41 +1,38 @@
-import {c} from "vite/dist/node/types.d-aGj9QkWt";
+import {Scenario} from "../type/scenario.ts";
 
-export function ProgressBar({scenario, selectedCar}) {
+interface ProgressBarProps {
+    scenario: Scenario;
+    selectedCar: Vehicle;
+    remainingTravelTime: [string, number, number, number][]
+}
 
-    const customer : Customer = scenario.customers.find((customer) => customer.id === selectedCar.customerId)
+export function ProgressBar({scenario, selectedCar, remainingTravelTime} : ProgressBarProps) {
 
-    function calculateProgress(car : Vehicle, customer: Customer) {
-        if (!customer) {
-            return -1;
+    function calculateProgress(car : Vehicle, remainingTravelTime: [string,number, number, number][]) {
+        if (!remainingTravelTime || !Array.isArray(remainingTravelTime)) {
+            return 0;
         }
-        const distanceToCustomer = Math.sqrt(
-            Math.pow(customer.coordX - car.coordX, 2) + Math.pow(customer.coordY - car.coordY, 2)
-        );
-        const distanceFromCustomerToEndpoint = Math.sqrt(
-            Math.pow(customer.coordX - customer.destinationX, 2) + Math.pow(customer.coordY - customer.destinationY, 2)
-        );
-        function calculateTotalDistance() {
-            if (customer.awaitingService) {
-                return distanceToCustomer + distanceFromCustomerToEndpoint
-            } else {
-                return distanceFromCustomerToEndpoint;
-            }
+
+        const tuple = remainingTravelTime.find((entry) => entry[0] === car.id);
+        if (!tuple) {
+            return 0; // No data found for this car
         }
-        return (car.distanceTravelled / calculateTotalDistance()) * 100;
-    }
+        const [_, timeLeft, totalTime] = tuple;
+
+        return ((totalTime - timeLeft) / totalTime) * 100;    }
 
     return (
         <>
             <div className="flex justify-between">
-                <p>start</p>
+                <p>Start</p>
                 <p>end</p>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-6 shadow-inner overflow-hidden">
                 <div
                     className="h-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white text-sm font-semibold transition-all duration-300"
-                    style={{width: `${calculateProgress(scenario, selectedCar)}%`}}
+                    style={{width: `${calculateProgress(selectedCar, remainingTravelTime)}%`}}
                 >
-                    {calculateProgress(scenario, selectedCar)}% {/* Display percentage */}
+                    {/*{calculateProgress(scenario, selectedCar)}% /!* Display percentage *!/*/}
                 </div>
             </div>
         </>

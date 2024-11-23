@@ -46,23 +46,18 @@ func RunOptimized(id string) scenario.Scenario {
 
 		// Create a path with the lowest costs between all customers in this cluster
 		pickupDestinationMatrix := createPickupDestinationMatrix(customersInCluster)
-		pathIdx := pickupDestinationMatrix.FindLowestCostPath()
-
-		// Map the path indices to the actual customers
-		var path []scenario.Customer
-		for _, idx := range pathIdx {
-			path = append(path, *customersInCluster[idx])
-		}
-		startCustomer := path[0]
 
 		// Find the nearest vehicle to the starting point of the first customer
 		var nearestVehicle *scenario.Vehicle
 		var minDistance float64
+		var customerIdx int
 		for _, v := range availableVehicles {
-			distance := startCustomer.DistanceToVehicle(v)
-			if nearestVehicle == nil || distance < minDistance {
-				nearestVehicle = v
-				minDistance = distance
+			for cIdx, c := range customersInCluster {
+				if nearestVehicle == nil || c.DistanceToVehicle(v) < minDistance {
+					nearestVehicle = v
+					minDistance = c.DistanceToVehicle(v)
+					customerIdx = cIdx
+				}
 			}
 		}
 
@@ -72,6 +67,14 @@ func RunOptimized(id string) scenario.Scenario {
 				availableVehicles = append(availableVehicles[:idx], availableVehicles[idx+1:]...)
 				break
 			}
+		}
+
+		_, pathIdx := pickupDestinationMatrix.FindLowestCostPathFromNode(customerIdx)
+
+		// Map the path indices to the actual customers
+		var path []scenario.Customer
+		for _, idx := range pathIdx {
+			path = append(path, *customersInCluster[idx])
 		}
 
 		// Add the vehicle route with the customers to the list of all routes
