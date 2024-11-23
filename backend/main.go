@@ -30,21 +30,15 @@ func main() {
 		panic(err)
 	}
 
-	var sc scenario.Scenario
-
 	switch algorithm {
 	case "greedy":
-		sc = algorithms.RunGreedy(id)
+		algorithms.RunGreedy(id)
 	case "optimized":
-		sc = algorithms.RunOptimized(id)
+		algorithms.RunOptimized(id)
 	default:
 		log.Fatalf("Unknown algorithm: %s", algorithm)
 	}
 
 	log.Println()
 	log.Printf("Finished scenario with id: %s", id)
-	log.Println()
-	log.Println("Statistics:")
-	log.Printf("- Time elapsed: %s", sc.TimeElapsed().String())
-	log.Printf("- Total distance travelled: %.2f", sc.TotalDistanceTravelled())
 }
