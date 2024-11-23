@@ -1,4 +1,3 @@
-import './App.css'
 import LeftPanel from "./components/LeftPanel.tsx";
 
 function App() {
