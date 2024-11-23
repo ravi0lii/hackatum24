@@ -1,10 +1,3 @@
-
-interface ScenarioCardProps {
-    name: string;
-    customerCount: number;
-    vehicleCount: number;
-}
-
 export function ScenarioCard({ name, customerCount, vehicleCount }) {
     return (
         <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-2">

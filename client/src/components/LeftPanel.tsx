@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react';
 import ScenarioCard from './ScenarioCard.tsx';
-import { Scenario } from '../type/scenario.ts';
 import {useQuery} from "react-query";
 import {scenarioService} from "../service/scenarioService.ts";
 
 export function LeftPanel() {
-    const [scenarios, setScenarios] = useState<Scenario[] | null>(null);
 
     const { isLoading, isError, data } = useQuery({
         queryKey: ['allScenarios'],
@@ -19,14 +16,6 @@ export function LeftPanel() {
     if (isError) {
         return <div>Error: Failed to fetch users</div>;
     }
-
-    // Simulating data fetching
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (!data) return;
-    //         setScenarios(data);
-    //     }
-    // }, []);
 
     return (
         <div className="w-64 h-full bg-gray-100 p-4 overflow-y-auto">
