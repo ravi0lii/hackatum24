@@ -24,35 +24,35 @@ func RunGreedy(id string) scenario.Scenario {
 
 		var dispatches []scenario.VehicleDispatch
 
-		for _, c := range customersForPickup {
-			// Find the nearest vehicle
-			var nearestVehicle *scenario.Vehicle
+		for _, v := range availableVehicles {
+			// Find the nearest customer
+			var nearestCustomer *scenario.Customer
 			var minDistance float64
-			for _, v := range availableVehicles {
+			for _, c := range customersForPickup {
 				distance := c.DistanceToVehicle(v)
-				if nearestVehicle == nil || distance < minDistance {
-					nearestVehicle = v
+				if nearestCustomer == nil || distance < minDistance {
+					nearestCustomer = c
 					minDistance = distance
 				}
 			}
 
-			// Assign nearest vehicle to customer
-			if nearestVehicle != nil {
+			// Assign nearest customer to vehicle
+			if nearestCustomer != nil {
 				log.Printf(
 					"Dispatching vehicle %s to customer %s",
-					utils.ShortenUUID(nearestVehicle.Id),
-					utils.ShortenUUID(c.Id),
+					utils.ShortenUUID(v.Id),
+					utils.ShortenUUID(nearestCustomer.Id),
 				)
 
 				dispatches = append(dispatches, scenario.VehicleDispatch{
-					Vehicle:  nearestVehicle,
-					Customer: c,
+					Vehicle:  v,
+					Customer: nearestCustomer,
 				})
 
-				// Remove the vehicle from the list of available vehicles
-				for idx, v := range availableVehicles {
-					if v.Id == nearestVehicle.Id {
-						availableVehicles = append(availableVehicles[:idx], availableVehicles[idx+1:]...)
+				// Remove the customer from the list of customers that can be picked up
+				for idx, c := range customersForPickup {
+					if c.Id == nearestCustomer.Id {
+						customersForPickup = append(customersForPickup[:idx], customersForPickup[idx+1:]...)
 						break
 					}
 				}
