@@ -3,6 +3,7 @@ package main
 import (
 	"backend/internal/scenario"
 	"log"
+	"time"
 )
 
 func main() {
@@ -25,9 +26,12 @@ func main() {
 		}
 
 		availableVehicles := sc.GetAvailableVehicles()
-		customersWithoutVehicleAssignment := sc.GetCustomersWithoutVehicleAssignment()
+		customersForPickup := sc.GetPickupableCustomers()
 
-		for _, c := range customersWithoutVehicleAssignment {
+		log.Printf("Available vehicles: %d", len(availableVehicles))
+		log.Printf("Customers that can be picked up: %d", len(customersForPickup))
+
+		for _, c := range customersForPickup {
 			// Find the nearest vehicle
 			var nearestVehicle *scenario.Vehicle
 			var minDistance float64
@@ -42,7 +46,7 @@ func main() {
 			// Assign nearest vehicle to customer
 			if nearestVehicle != nil {
 				log.Printf("Dispatching vehicle %s to customer %s", nearestVehicle.Id, c.Id)
-				err := scenario.Dispatch(&sc, []scenario.VehicleDispatch{
+				result, err := scenario.Dispatch(&sc, []scenario.VehicleDispatch{
 					{
 						Vehicle:  nearestVehicle,
 						Customer: c,
@@ -51,6 +55,21 @@ func main() {
 				if err != nil {
 					panic(err)
 				}
+
+				// Check if the dispatch failed for some vehicles
+				if len(result.FailedToUpdate) > 0 {
+					for _, f := range result.FailedToUpdate {
+						log.Printf("Failed to dispatch vehicle %s to customer %s", f.Vehicle.Id, f.Customer.Id)
+					}
+				}
+
+				// Remove the vehicle from the list of available vehicles
+				for idx, v := range availableVehicles {
+					if v.Id == nearestVehicle.Id {
+						availableVehicles = append(availableVehicles[:idx], availableVehicles[idx+1:]...)
+						break
+					}
+				}
 			}
 		}
 
@@ -58,6 +77,8 @@ func main() {
 		if !sc.IsRunning() {
 			break
 		}
+
+		time.Sleep(1000 * time.Millisecond)
 	}
 
 	log.Printf("Finished scenario with id: %s", id)

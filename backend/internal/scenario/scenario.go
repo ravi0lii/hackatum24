@@ -15,12 +15,12 @@ const (
 )
 
 type Customer struct {
-	Id             string  `json:"id"`
-	PickupX        float64 `json:"coordX"`
-	PickupY        float64 `json:"coordY"`
-	DestinationX   float64 `json:"destinationX"`
-	DestinationY   float64 `json:"destinationY"`
-	AwaitingPickup bool    `json:"awaitingService"`
+	Id              string  `json:"id"`
+	PickupX         float64 `json:"coordX"`
+	PickupY         float64 `json:"coordY"`
+	DestinationX    float64 `json:"destinationX"`
+	DestinationY    float64 `json:"destinationY"`
+	AwaitingService bool    `json:"awaitingService"`
 }
 
 type Vehicle struct {
@@ -74,8 +74,14 @@ func (s *Scenario) GetAvailableVehicles() (availableVehicles []*Vehicle) {
 	return
 }
 
-func (s *Scenario) GetCustomersWithoutVehicleAssignment() (customersWithoutVehicle []*Customer) {
+func (s *Scenario) GetPickupableCustomers() (customersWithoutVehicle []*Customer) {
 	for idx, c := range s.Customers {
+		// If the customer is not awaiting service, we have to skip him, otherwise we would get an error while
+		// dispatching to this customer
+		if !c.AwaitingService {
+			continue
+		}
+
 		// If there is a vehicle that has its customer id set to the current customer id, it means that the customer is
 		// waiting for pickup by this vehicle
 		customerIsAssigned := false
