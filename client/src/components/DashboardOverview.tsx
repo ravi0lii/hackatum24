@@ -4,6 +4,7 @@ import {scenarioService} from "../service/scenarioService.ts";
 import {MetaDataStats} from "./MetaDataStats.tsx";
 import CopyButton from "./CopyButton.tsx";
 import {useState} from "react";
+import {ClockIcon, TruckIcon} from "@heroicons/react/16/solid";
 
 interface DashboardOverviewProps {
     scenario: Scenario;
@@ -41,8 +42,10 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
         <div className="p-6 bg-white shadow-lg rounded-lg w-full h-full">
             <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
             <div className="flex space-x-4">
-                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}/>
-                <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}/>
+                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}
+                Icon={ClockIcon}/>
+                <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}
+                Icon={TruckIcon}/>
             </div>
             {/* Tab System */}
             <div className="mt-4">
@@ -105,8 +108,10 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
                         </ul>
                     </div>
                 )}
-            </div>        </div>
-    );
+            </div>
+        </div>
+        </div>
+    )
 }
 
 export default DashboardOverview;
