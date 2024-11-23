@@ -99,6 +99,14 @@ func (s *Scenario) GetPickupableCustomers() (customersWithoutVehicle []*Customer
 	return
 }
 
+func (s *Scenario) TotalDistanceTravelled() float64 {
+	var totalDistance float64
+	for _, v := range s.Vehicles {
+		totalDistance += v.DistanceTravelled
+	}
+	return totalDistance
+}
+
 func (s *Scenario) IsRunning() bool {
 	return s.Status == ScenarioStatusRunning
 }
