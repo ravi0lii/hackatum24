@@ -36,7 +36,10 @@ export function DashboardOverview({ scenario, scenarioSelectedId, setSelectedSce
     }, [data, setSelectedScenario]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (<div className="flex items-start">
+            <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
+            <CopyButton valueToCopy={scenario.id}></CopyButton>
+        </div>)
     }
 
     if (isError) {
@@ -104,7 +107,7 @@ export function DashboardOverview({ scenario, scenarioSelectedId, setSelectedSce
                     <CustomerTab scenario={scenario} scenarioSelectedId={scenarioSelectedId}/>
                 )}
                 {activeTab === "graph" && (
-                    <GraphTab scenario={scenario}/>
+                    <GraphTab scenario={scenario} remainingTravelTime={remainingTravelTime}/>
                 )}
             </div>
         </div>

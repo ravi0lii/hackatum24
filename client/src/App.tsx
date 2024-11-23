@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 function App() {
     const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
-    let vehicleRemainingTravelTime = useRef<[string, number, number, number][]>([]);
+    let vehicleRemainingTravelTime = useRef<[string, number, number, number][]>([]); // vehicle id, current, total, prev
 
     const handleSetScenario = (scenario) => setSelectedScenario(scenario)
 
