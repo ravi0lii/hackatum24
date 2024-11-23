@@ -1,4 +1,4 @@
-type Scenario = {
+export type Scenario = {
     customers: Customer[];
     endTime: string;
     id: string;

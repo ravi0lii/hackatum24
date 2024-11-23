@@ -7,12 +7,15 @@ class ApiClient {
         this.client = axios.create({
             baseURL,
             headers: {
-                'Content-Type': 'application/json',
+                'accept': 'application/json',
+                // 'Access-Control-Allow-Origin': '*',
+                // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
             },
         });
     }
 
     get<T>(url: string, params?: unknown) {
+        console.log('Request Headers:', this.client.defaults.headers);
         return this.client.get<T>(url, {params})
     }
 
@@ -21,7 +24,7 @@ class ApiClient {
     }
 }
 
-export const apiClient = new ApiClient("http://localhost:4000");
+export const apiClient = new ApiClient("http://localhost:8080");
 
 export function postprocessResponse<T>(data: T): T {
     if (data !== null && typeof data === "object") {
