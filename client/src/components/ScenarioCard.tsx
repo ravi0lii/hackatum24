@@ -1,34 +1,25 @@
-import {useState} from "react";
+interface ScenarioCardProps {
+    name: string;
+    customerCount: number;
+    vehicleCount: number;
+}
 
-export function ScenarioCard({ name, customerCount, vehicleCount, isActive, onClick }) {
-
-    // const [isClicked, setIsClicked] = useState(false);
-
-    // Toggle the state on click
-    // const handleClick = () => {
-    //     setIsClicked(!isClicked);
-    // };
-
+export function ScenarioCard({ name, customerCount, vehicleCount }: ScenarioCardProps) {
     return (
-        <div
-            onClick={onClick}
-            className={`p-4 shadow-md rounded-lg flex flex-col gap-2 cursor-pointer ${
-                isActive ? "bg-pink-300" : "bg-white"
-            }`}
-        >
-        <h3 className="text-lg font-semibold">{name}</h3>
+        <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-2 cursor-pointer hover:bg-gray-200">
+            <h3 className="text-lg font-semibold">{name}</h3>
             <div className="flex justify-between items-center text-sm text-gray-700">
-    <div className="flex items-center gap-1">
-    <div className="text-blue-500" />
-        <span>{customerCount} Customers</span>
-    </div>
-    <div className="flex items-center gap-1">
-    <div className="text-green-500" />
-        <span>{vehicleCount} Vehicles</span>
-    </div>
-    </div>
-    </div>
-);
+                <div className="flex items-center gap-1">
+                    <div className="text-blue-500" />
+                    <span>{customerCount} Customers</span>
+                </div>
+                <div className="flex items-center gap-1">
+                    <div className="text-green-500" />
+                    <span>{vehicleCount} Vehicles</span>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default ScenarioCard;
