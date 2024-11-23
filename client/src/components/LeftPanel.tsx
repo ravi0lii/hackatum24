@@ -2,12 +2,17 @@ import ScenarioCard from './ScenarioCard.tsx';
 import { useQuery } from "react-query";
 import { scenarioService } from "../service/scenarioService.ts";
 import { Scenario } from "../type/scenario.ts";
+import {useState} from "react";
 
 interface LeftPanelProps {
     setSelectedScenario: (scenario: Scenario) => void;
 }
 
 export function LeftPanel({ setSelectedScenario }: LeftPanelProps) {
+
+    const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
+
     const { isLoading, isError, data } = useQuery({
         queryKey: ['allScenarios'],
         queryFn: scenarioService.getAllScenarios,
@@ -23,8 +28,8 @@ export function LeftPanel({ setSelectedScenario }: LeftPanelProps) {
     }
 
     return (
-        <div className="w-64 h-full bg-gray-100 p-4 overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Scenarios</h2>
+        <div className="w-64 h-full bg-white-950 p-4 overflow-y-auto">
+            <h2 className="text-xl font-bold text-pink-500 mb-4">Scenarios</h2>
             <div className="flex flex-col gap-4">
                 {data?.map((scenario) => (
                     <li
@@ -36,6 +41,8 @@ export function LeftPanel({ setSelectedScenario }: LeftPanelProps) {
                             name={scenario.status}
                             customerCount={scenario.customers.length}
                             vehicleCount={scenario.vehicles.length}
+                            isActive={selectedCardId === scenario.id}
+                            onClick={() => setSelectedCardId(scenario.id)}
                         />
                     </li>
                 ))}
