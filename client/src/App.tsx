@@ -15,9 +15,9 @@ function App() {
                 <TopPanel />
 
                 {/* Main Content Area: LeftPanel and Dashboard Content */}
-                <div className="flex flex-grow">
+                <div className="flex flex-grow overflow-hidden">
                     <LeftPanel setSelectedScenario={setSelectedScenario} />
-                    <div className="flex-grow bg-gray-50 flex items-center justify-center">
+                    <div className="flex-grow bg-gray-50 p-6 overflow-auto">
                         {selectedScenario ? (
                             <DashboardOverview scenario={selectedScenario} />
                         ) : (
