@@ -27,18 +27,23 @@ export function LeftPanel({ setSelectedScenario }: LeftPanelProps) {
         return <div>Error: Failed to fetch scenarios</div>;
     }
 
+    const numberedScenarios = data?.map((scenario, index) => ({
+        ...scenario,
+        number: index + 1, // Add 1-based numbering
+    }));
+
     return (
         <div className="w-64 h-full bg-white-950 p-4 overflow-y-auto">
             <h2 className="text-xl font-bold text-pink-500 mb-4">Scenarios</h2>
             <div className="flex flex-col gap-4">
-                {data?.map((scenario) => (
+                {numberedScenarios?.map((scenario) => (
                     <li
                         key={scenario.id}
                         className="list-none"
                         onClick={() => setSelectedScenario(scenario)}
                     >
                         <ScenarioCard
-                            name={scenario.status}
+                            name={`Scenario ${scenario.number}`}
                             customerCount={scenario.customers.length}
                             vehicleCount={scenario.vehicles.length}
                             isActive={selectedCardId === scenario.id}
