@@ -2,16 +2,27 @@ package main
 
 import (
 	"backend/internal/scenario"
+	"backend/internal/utils"
+	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
 func main() {
-	id := "38e8e73b-d52e-42d3-a6c3-3986f63c6cd6"
+	// Get input from stdin
+	var id string
+	log.Println("Enter the scenario id:")
+	_, err := fmt.Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+
+	id = strings.TrimSpace(id)
 
 	// Start the scenario
 	log.Printf("Starting scenario with id: %s", id)
-	err := scenario.StartScenario(id)
+	err = scenario.StartScenario(id)
 	if err != nil {
 		panic(err)
 	}
@@ -28,8 +39,9 @@ func main() {
 		availableVehicles := sc.GetAvailableVehicles()
 		customersForPickup := sc.GetPickupableCustomers()
 
-		log.Printf("Available vehicles: %d", len(availableVehicles))
-		log.Printf("Customers that can be picked up: %d", len(customersForPickup))
+		log.Printf("Available vehicles: %d - Customers that can be picked up: %d", len(availableVehicles), len(customersForPickup))
+
+		var dispatches []scenario.VehicleDispatch
 
 		for _, c := range customersForPickup {
 			// Find the nearest vehicle
@@ -45,23 +57,16 @@ func main() {
 
 			// Assign nearest vehicle to customer
 			if nearestVehicle != nil {
-				log.Printf("Dispatching vehicle %s to customer %s", nearestVehicle.Id, c.Id)
-				result, err := scenario.Dispatch(&sc, []scenario.VehicleDispatch{
-					{
-						Vehicle:  nearestVehicle,
-						Customer: c,
-					},
-				})
-				if err != nil {
-					panic(err)
-				}
+				log.Printf(
+					"Dispatching vehicle %s to customer %s",
+					utils.ShortenUUID(nearestVehicle.Id),
+					utils.ShortenUUID(c.Id),
+				)
 
-				// Check if the dispatch failed for some vehicles
-				if len(result.FailedToUpdate) > 0 {
-					for _, f := range result.FailedToUpdate {
-						log.Printf("Failed to dispatch vehicle %s to customer %s", f.Vehicle.Id, f.Customer.Id)
-					}
-				}
+				dispatches = append(dispatches, scenario.VehicleDispatch{
+					Vehicle:  nearestVehicle,
+					Customer: c,
+				})
 
 				// Remove the vehicle from the list of available vehicles
 				for idx, v := range availableVehicles {
@@ -73,12 +78,31 @@ func main() {
 			}
 		}
 
+		// Dispatch the vehicles if there are any
+		if len(dispatches) > 0 {
+			result, err := scenario.Dispatch(&sc, dispatches)
+			if err != nil {
+				panic(err)
+			}
+
+			// Check if the dispatch failed for some vehicles
+			if len(result.FailedToUpdate) > 0 {
+				for _, f := range result.FailedToUpdate {
+					log.Printf(
+						"Failed to dispatch vehicle %s to customer %s",
+						utils.ShortenUUID(f.Vehicle.Id),
+						utils.ShortenUUID(f.Customer.Id),
+					)
+				}
+			}
+		}
+
 		// if the scenario is not running anymore, break the loop
 		if !sc.IsRunning() {
 			break
 		}
 
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(3000 * time.Millisecond)
 	}
 
 	log.Printf("Finished scenario with id: %s", id)
