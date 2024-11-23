@@ -89,6 +89,7 @@ export function DashboardOverview({ scenario, setSelectedScenario }: DashboardOv
                 )}
             </div>
         </div>
+        </div>
     );
 }
 
