@@ -6,6 +6,7 @@ import CopyButton from "./CopyButton.tsx";
 import {useState} from "react";
 import {CarTab} from "./CarTab.tsx";
 import {CustomerTab} from "./CustomerTab.tsx";
+import {ClockIcon, TruckIcon} from "@heroicons/react/16/solid";
 
 interface DashboardOverviewProps {
     scenario: Scenario;
@@ -38,15 +39,19 @@ export function DashboardOverview({ scenario, setSelectedScenario }: DashboardOv
     }
 
     return (
-        <div className="p-6 bg-white shadow-lg rounded-lg w-full h-full">
+        <div className="p-6 bg-white shadow-lg rounded-lg">
             <div className="flex items-start">
                 <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
                 <CopyButton valueToCopy={scenario.id}></CopyButton>
             </div>
 
+        <div className="p-6 bg-white shadow-lg rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
             <div className="flex space-x-4">
-                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}/>
-                <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}/>
+                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}
+                Icon={ClockIcon}/>
+                <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}
+                Icon={TruckIcon}/>
             </div>
             {/* Tab System */}
             <div className="mt-4">
