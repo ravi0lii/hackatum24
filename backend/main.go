@@ -105,8 +105,10 @@ func main() {
 		time.Sleep(3000 * time.Millisecond)
 	}
 
+	log.Println()
 	log.Printf("Finished scenario with id: %s", id)
 	log.Println()
 	log.Println("Statistics:")
 	log.Printf("- Time elapsed: %s", sc.TimeElapsed().String())
+	log.Printf("- Total distance travelled: %.2f", sc.TotalDistanceTravelled())
 }
