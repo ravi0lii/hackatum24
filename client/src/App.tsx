@@ -2,6 +2,7 @@ import LeftPanel from "./components/LeftPanel.tsx";
 import { useState } from "react";
 import { Scenario } from "./type/scenario.ts";
 import {DashboardOverview} from "./components/DashboardOverview.tsx";
+import {Instructions} from "./components/Instructions.tsx";
 
 function App() {
     const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
@@ -19,7 +20,9 @@ function App() {
                             <DashboardOverview scenario={selectedScenario}
                                                setSelectedScenario={setSelectedScenario} />
                         ) : (
-                            <h1 className="text-2xl font-bold">Dashboard Content</h1>
+                            <div><h1 className="text-2xl font-bold">Welcome</h1>
+                                <Instructions/>
+                            </div>
                         )}
                     </div>
                 </div>
