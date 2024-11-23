@@ -1,17 +1,8 @@
 import { useState } from 'react';
+import {ProgressBar} from "./ProgressBar.tsx";
 
 export function CarTab({ scenario }) {
     const [selectedCar, setSelectedCar] = useState(null); // State to track the selected car
-
-    const calculateProgress = (car, customer) => {
-        const distanceToCustomer = Math.sqrt(
-            Math.pow(customer.coordX - car.coordX, 2) + Math.pow(customer.coordY - car.coordY, 2)
-        );
-        const totalDistance = Math.sqrt(
-            Math.pow(customer.coordX - car.destinationX, 2) + Math.pow(customer.coordY - car.destinationY, 2)
-        );
-        return (distanceToCustomer / totalDistance) * 100;
-    };
 
     return (
         <>
@@ -49,23 +40,7 @@ export function CarTab({ scenario }) {
                             </p>
 
                             {/* Progress Bar */}
-                            <div className="mt-6">
-                                <h4 className="text-md font-semibold mb-2">Progress</h4>
-                                <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                                    <div
-                                        className="absolute top-0 left-0 h-full bg-blue-500 transition-all"
-                                        style={{
-                                            width: `${calculateProgress(selectedCar, scenario.customers[0])}%`
-                                        }}
-                                    ></div>
-                                    <div
-                                        className="absolute inset-0 flex justify-between text-xs text-gray-700 font-medium px-2">
-                                        <span>Car ({selectedCar.coordX}, {selectedCar.coordY})</span>
-                                        <span>Customer ({scenario.customers[0].coordX}, {scenario.customers[0].coordY})</span>
-                                        <span>Destination ({selectedCar.destinationX}, {selectedCar.destinationY})</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <ProgressBar selectedCar={selectedCar} scenario={scenario} />
                         </div>
                     ) : (
                         <p className="text-gray-600">Select a car to see details.</p>

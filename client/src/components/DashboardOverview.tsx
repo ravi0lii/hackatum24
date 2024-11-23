@@ -48,7 +48,7 @@ export function DashboardOverview({ scenario, setSelectedScenario }: DashboardOv
         <div className="p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
             <div className="flex space-x-4">
-                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}
+                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => Math.round((total + vehicle.distanceTravelled)/60), 0))}
                 Icon={ClockIcon}/>
                 <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}
                 Icon={TruckIcon}/>
