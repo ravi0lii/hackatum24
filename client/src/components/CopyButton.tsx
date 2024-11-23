@@ -17,14 +17,15 @@ export function CopyButton({ valueToCopy }) {
     };
 
     return (
-        <div className="flex items-start">
+        <div className="flex items-start px-4 py-2">
             <button
                 onClick={handleCopy}
-                className="px-4 py-2 text-white"
+                className=" text-white"
             >
                 {copied ? <ClipboardDocumentIcon className="size-6 text-blue-300"/> :
                     <ClipboardDocumentIcon className="size-6 text-gray-300" />}
             </button>
+            <span className="pl-2 text-gray-400">{copied? "Scenario ID copied!" : ""}</span>
         </div>
     );
 }
