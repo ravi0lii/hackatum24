@@ -1,8 +1,8 @@
-import React from 'react';
 import { Scenario } from "../type/scenario.ts";
 import {useQuery} from "react-query";
 import {scenarioService} from "../service/scenarioService.ts";
 import {MetaDataStats} from "./MetaDataStats.tsx";
+import CopyButton from "./CopyButton.tsx";
 
 interface DashboardOverviewProps {
     scenario: Scenario;
@@ -10,7 +10,7 @@ interface DashboardOverviewProps {
 
 export function DashboardOverview({ scenario }: DashboardOverviewProps) {
 
-    const { isLoading, isError, data } = useQuery({
+    const { isLoading, isError } = useQuery({
         queryKey: ['scenarioData', scenario.id], // Use dynamic ID
         queryFn: ({ queryKey }) => {
             const [, id] = queryKey;
@@ -29,7 +29,11 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
 
     return (
         <div className="p-6 bg-white shadow-lg rounded-lg w-full h-full max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
+            <div className="flex items-start">
+                <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
+                <CopyButton valueToCopy={scenario.id}></CopyButton>
+            </div>
+
             <div className="flex space-x-4">
                 <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.distanceTravelled, 0))}/>
                 <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}/>
