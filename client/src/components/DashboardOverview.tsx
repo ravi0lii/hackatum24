@@ -6,7 +6,7 @@ import CopyButton from "./CopyButton.tsx";
 import {useEffect, useState} from "react";
 import {CarTab} from "./CarTab.tsx";
 import {CustomerTab} from "./CustomerTab.tsx";
-import {ClockIcon, TruckIcon} from "@heroicons/react/16/solid";
+import {ClockIcon, GlobeEuropeAfricaIcon, TruckIcon} from "@heroicons/react/16/solid";
 import {GraphTab} from "./GraphTab.tsx";
 
 interface DashboardOverviewProps {
@@ -56,10 +56,26 @@ export function DashboardOverview({ scenario, scenarioSelectedId, setSelectedSce
         <div className="p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Scenario Overview</h2>
             <div className="flex space-x-4">
-                <MetaDataStats  title={"Total Travel Time"} data={String(scenario.vehicles.reduce((total, vehicle) => Math.round((total + vehicle.distanceTravelled)/60), 0))}
-                Icon={ClockIcon}/>
-                <MetaDataStats  title={"Total Number of Trips"} data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}
-                Icon={TruckIcon}/>
+                <MetaDataStats title={"Total Travel Time"}
+                               data={String(scenario.vehicles.reduce((total, vehicle) => Math.round((total + vehicle.distanceTravelled) / 60), 0))}
+                               Icon={ClockIcon}/>
+                <MetaDataStats title={"Total Number of Trips"}
+                               data={String(scenario.vehicles.reduce((total, vehicle) => total + vehicle.numberOfTrips, 0))}
+                               Icon={TruckIcon}/>
+                <div className="w-64 bg-white rounded-lg shadow-md p-4 flex flex-col gap-4">
+                    {/* Header Section */}
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-semibold text-gray-500">Eco Rating</h3>
+                        <div className="bg-green-100 p-1 rounded-full">
+                            <GlobeEuropeAfricaIcon className="h-6 w-6 text-green-500"/>
+                        </div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-gray-800">Excellent</h2>
+                    </div>
+                </div>
             </div>
             {/* Tab System */}
             <div className="mt-4">

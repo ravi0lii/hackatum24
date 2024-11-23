@@ -13,7 +13,6 @@ services:
     restart: always
     depends_on:
       - backend
-      - frontend
       - postgres
   postgres:
     image: postgres:13-alpine
@@ -28,7 +27,7 @@ services:
   frontend:
     image: mikechatzis/hackatumtsichallenge:frontend
     ports:
-      - "9000:9000"
+      - "9001:9000"
     restart: no
     depends_on:
       - backend
