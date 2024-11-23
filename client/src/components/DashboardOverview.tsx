@@ -4,18 +4,20 @@ import {scenarioService} from "../service/scenarioService.ts";
 import {MetaDataStats} from "./MetaDataStats.tsx";
 import CopyButton from "./CopyButton.tsx";
 import {useState} from "react";
+import {CarTab} from "./CarTab.tsx";
+import {CustomerTab} from "./CustomerTab.tsx";
 
 interface DashboardOverviewProps {
     scenario: Scenario;
+    setSelectedScenario: (selectedScenario: Scenario) => void;
 }
 
-export function DashboardOverview({ scenario }: DashboardOverviewProps) {
+export function DashboardOverview({ scenario, setSelectedScenario }: DashboardOverviewProps) {
 
-    const [activeTab, setActiveTab] = useState<"cars" | "customers">("cars"); // Manage active tab
+    const [activeTab, setActiveTab] = useState<"cars" | "customers">("cars");
 
-    // TODO i dont think this query is used RIGHT NOW
-    const { isLoading, isError } = useQuery({
-        queryKey: ['scenarioData', scenario.id], // Use dynamic ID
+    const { isLoading, isError, data } = useQuery({
+        queryKey: ['scenarioData', scenario.id],
         queryFn: ({ queryKey }) => {
             const [, id] = queryKey;
             return scenarioService.getScenarioById(id as string);
@@ -28,7 +30,11 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
     }
 
     if (isError) {
-        return <div>Error: Failed to fetch scenarios</div>;
+        setSelectedScenario(scenario)
+    }
+
+    if (data) {
+        setSelectedScenario(data)
     }
 
     return (
@@ -45,7 +51,7 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
             {/* Tab System */}
             <div className="mt-4">
                 {/* Tabs */}
-                <div className="flex border-b border-gray-200 mb-4">
+                <div className="flex border-b mb-4">
                     <button
                         className={`px-4 py-2 text-sm font-medium ${
                             activeTab === "cars"
@@ -70,40 +76,14 @@ export function DashboardOverview({ scenario }: DashboardOverviewProps) {
 
                 {/* Tab Content */}
                 {activeTab === "cars" && (
-                    <div>
-                        <h3 className="text-lg font-semibold mb-2">Cars</h3>
-                        <ul className="space-y-2">
-                            {scenario.vehicles.map((vehicle) => (
-                                <li
-                                    key={vehicle.id}
-                                    className="p-4 bg-gray-100 rounded-md shadow-md flex justify-between"
-                                >
-                                    <span>ID: {vehicle.id}</span>
-                                    <span>Trips: {vehicle.numberOfTrips}</span>
-                                    <span>Distance: {vehicle.distanceTravelled} km</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    <CarTab scenario={scenario} />
                 )}
 
                 {activeTab === "customers" && (
-                    <div>
-                        <h3 className="text-lg font-semibold mb-2">Customers</h3>
-                        <ul className="space-y-2">
-                            {scenario.customers.map((customer) => (
-                                <li
-                                    key={customer.id}
-                                    className="p-4 bg-gray-100 rounded-md shadow-md flex justify-between"
-                                >
-                                    <span>ID: {customer.id}</span>
-                                    <span>Location: ({customer.coordX}, {customer.coordY})</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    <CustomerTab scenario={scenario}/>
                 )}
-            </div>        </div>
+            </div>
+        </div>
     );
 }
 

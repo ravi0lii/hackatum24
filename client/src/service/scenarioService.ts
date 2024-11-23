@@ -1,4 +1,4 @@
-import {apiClient, postprocessResponse} from "../util/apiClient.ts";
+import {apiClient, postprocessResponse, runnerClient} from "../util/apiClient.ts";
 import {Scenario} from "../type/scenario.ts";
 
 export class scenarioService {
@@ -10,7 +10,7 @@ export class scenarioService {
     }
 
     static async getScenarioById(scenarioId: string): Promise<Scenario> {
-        const response = await apiClient.get(`/scenarios/${scenarioId}`)
+        const response = await runnerClient.get(`/Scenarios/get_scenario/${scenarioId}`)
         return postprocessResponse<Scenario>(response.data)
     }
 }

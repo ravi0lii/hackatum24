@@ -26,6 +26,8 @@ class ApiClient {
 
 export const apiClient = new ApiClient("http://localhost:8080");
 
+export const runnerClient = new ApiClient("http://localhost:8090");
+
 export function postprocessResponse<T>(data: T): T {
     if (data !== null && typeof data === "object") {
         if (Array.isArray(data)) {
